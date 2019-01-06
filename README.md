@@ -79,20 +79,19 @@ $ ./imgur-uploader-api
 				
 ### Mini-How-To (List of End-Points)
 
-	- After running the docker binary, we need to supply the authorization-code by
-	  approving a permission on this app 
+###### 	- After running the docker binary, we need to supply the authorization-code by approving a permission on this app 
 	  
-	- Paste the below URL on your browser(chrome)
+###### 	- Paste the below URL on your browser(chrome)
 			
 		https://api.imgur.com/oauth2/authorize?access_type=offline&client_id={YOUR_CLIENT_ID_FROM_IMGUR}&response_type=code&state=state
 
-	- This will auto-redirect to the callback URL you've setup in the registration quickstart.
+###### 	- This will auto-redirect to the callback URL you've setup in the registration quickstart.
 	   
 	    https://app.getpostman.com/oauth2/callback?state=state&code={IMGUR_AUTH_CODE_IS_HERE}
 		
-	- Pass this one-time to the api-bridge 
+###### 	- Pass this one-time to the api-bridge 
 
-	```sh
+```sh
 	    curl -v -X GET  'http://127.0.0.1:7777/v1/api/credentials/{IMGUR_AUTH_CODE_IS_HERE}'
 		
 		@output:
@@ -100,9 +99,9 @@ $ ./imgur-uploader-api
 		  "code": 202,
 		  "message": "Accepted"
 		}
-	```		
+```		
 	
-	- Upload image URLs to the api-bridge
+###### - Upload image URLs to the api-bridge
 	
 	```sh
 		curl -v  POST 'http://127.0.0.1:7777/v1/api/images/upload' -d '{
@@ -118,7 +117,7 @@ $ ./imgur-uploader-api
 		}
 	```
 	
-	- Get image URLs list
+###### 	- Get image URLs list
 			
 	```sh		
 		curl -X GET  'http://127.0.0.1:7777/v1/api/images'
@@ -131,7 +130,7 @@ $ ./imgur-uploader-api
 		}
 	```	
 		
-	- Get image URLs list by jobId
+###### - Get image URLs list by jobId
 	
 	
 	```sh
@@ -154,7 +153,7 @@ $ ./imgur-uploader-api
 		}
 	```
 			
-	- Get image URLs list by jobId (Invalid JobId)
+###### - Get image URLs list by jobId (Invalid JobId)
 	
 	```sh
 		curl -v  GET 'http://127.0.0.1:7777/v1/api/images/upload/f16fbca4-dae2-4c73-8304-df2966fa8831-20190106-nocontent' 
