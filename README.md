@@ -77,9 +77,96 @@ $ ./imgur-uploader-api
 ```
 
 				
-### List of End-Points
+### Mini-How-To (List of End-Points)
 
+	- After running the docker binary, we need to supply the authorization-code by
+	  approving a permission on this app 
+	  
+	- Paste the below URL on your browser(chrome)
+			
+		https://api.imgur.com/oauth2/authorize?access_type=offline&client_id={YOUR_CLIENT_ID_FROM_IMGUR}&response_type=code&state=state
 
+	- This will auto-redirect to the callback URL you've setup in the registration quickstart.
+	   
+	    https://app.getpostman.com/oauth2/callback?state=state&code={IMGUR_AUTH_CODE_IS_HERE}
+		
+	- Pass this one-time to the api-bridge 
+
+	```sh
+	    curl -v -X GET  'http://127.0.0.1:7777/v1/api/credentials/{IMGUR_AUTH_CODE_IS_HERE}'
+		
+		@output:
+		{
+		  "code": 202,
+		  "message": "Accepted"
+		}
+	```		
+	
+	- Upload image URLs to the api-bridge
+	
+	```sh
+		curl -v  POST 'http://127.0.0.1:7777/v1/api/images/upload' -d '{
+				"urls": [
+					"https://farm3.staticflickr.com/2879/11234651086_681b3c2c00_b_d.jpg",
+					"https://farm4.staticflickr.com/3790/11244125445_3c2f32cd83_k_d.jpg"
+					]
+				}'
+				
+		@output:
+		{
+		  "jobId": "1cfc8710-c366-4241-833b-3c5a988700cf-20190106-091212"
+		}
+	```
+	
+	- Get image URLs list
+			
+	```sh		
+		curl -X GET  'http://127.0.0.1:7777/v1/api/images'
+		@output:
+		{
+		  "uploaded": [
+			"https://i.imgur.com/8yc2oCz.jpg",
+			"https://i.imgur.com/u6GIFQA.jpg"
+		  ]
+		}
+	```	
+		
+	- Get image URLs list by jobId
+	
+	
+	```sh
+		curl -v  GET 'http://127.0.0.1:7777/v1/api/images/upload/1cfc8710-c366-4241-833b-3c5a988700cf-20190106-091212'  
+		
+		@output:
+		{
+		  "id": "1cfc8710-c366-4241-833b-3c5a988700cf-20190106-091212",
+		  "created": "2019-01-06T09:12:12Z",
+		  "finished": "2019-01-06T09:12:28Z",
+		  "status": "complete",
+		  "uploaded": {
+			"complete": [
+			  "https://i.imgur.com/8yc2oCz.jpg",
+			  "https://i.imgur.com/u6GIFQA.jpg"
+			],
+			"pending": null,
+			"failed": null
+		  }
+		}
+	```
+			
+	- Get image URLs list by jobId (Invalid JobId)
+	
+	```sh
+		curl -v  GET 'http://127.0.0.1:7777/v1/api/images/upload/f16fbca4-dae2-4c73-8304-df2966fa8831-20190106-nocontent' 
+		@output:
+		{
+		  "code": 204,
+		  "message": "No Content"
+		}
+	```
+	
+	
+	
 ### License
 
 [MIT](https://bayugyug.mit-license.org/)
