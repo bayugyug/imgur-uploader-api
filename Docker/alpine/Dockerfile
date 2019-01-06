@@ -29,8 +29,7 @@ RUN apk add --no-cache ca-certificates && \
     apk del .build-deps go git gcc musl-dev && \
     rm -rf /var/lib/{apt,dpkg,cache,log}/ &&  \
     rm -rf /var/{cache,log} && \
-    rm -fr /go/pkg  /go/src && \
-    du -sh /go/* /*
+    rm -fr /go/pkg  /go/src
 
 #main entry
 ENTRYPOINT [ "/go/bin/imgur-uploader-api" ]
