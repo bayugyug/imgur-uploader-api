@@ -48,9 +48,6 @@
     sudo  docker run -p 7000-8000:7000-8000 -v `pwd`:`pwd` -w `pwd` -d --name imgur-uploader-api-latest  bayugyug/imgur-uploader-api:latest --port 7777   --credentials='{"client_id": "{YOUR_CLIENT_ID_FROM_IMGUR}", "client_secret": "{YOUR_CLIENT_SECRET_FROM_IMGUR}"}'
 
 
-
-    curl -i -v 'http://127.0.0.1:7777/v1/api/images'
-
 ```
 
 
