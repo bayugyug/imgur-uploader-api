@@ -1,4 +1,4 @@
-ariables:
+variables:
   PACKAGE_PATH: /go/src/gitlab.com/bayugyug/imgur-uploader-api
 
 stages:
