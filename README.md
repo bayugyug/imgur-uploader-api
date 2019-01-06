@@ -1,7 +1,12 @@
 ## imgur-uploader-api
 
-### A simple golang script that bridge the Imgur REST API
 
+
+### A simple golang script that bridge the Imgur REST API 
+    
+	( customize-image-upload-only as a mini-test )
+
+	
 ### Registration Quickstart
 
 	 
@@ -33,7 +38,7 @@
 
 
 				
-## Docker Binary
+### Docker Binary
 
 
 ```sh
