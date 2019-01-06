@@ -24,7 +24,11 @@ func manageImageLocalDownloader(isReady chan bool) {
 		select {
 		case rec := <-pUploaderChan:
 			if rec.ID != "" {
-				downloadImage2LocalAndPush(rec)
+				//save it
+				rec.Status = StatusInProgress
+				pImageHistory[rec.ID] = rec
+				//forget and process
+				go downloadImage2LocalAndPush(rec)
 			}
 		}
 	}
@@ -32,13 +36,7 @@ func manageImageLocalDownloader(isReady chan bool) {
 
 func downloadImage2LocalAndPush(rec *UploadRecords) {
 
-	rec.Status = StatusInProgress
-
 	processed := make(map[string]string)
-
-	//save it
-	pImageHistory[rec.ID] = rec
-	
 	//parse & download and convert
 	for k, row := range rec.URLS {
 		resp, rcode, derr := httpGet(row.Link, map[string]string{})
@@ -95,13 +93,13 @@ func downloadImage2LocalAndPush(rec *UploadRecords) {
 			pending = append(pending, v)
 		}
 	}
-	
+
 	//done
 	rec.UploadedList.Pending = pending
 	rec.Status = StatusComplete
 	rec.Finished = time.Now().Format(time.RFC3339)
 	dumper(rec)
-	
+
 	//maybe overwrite it
 	pImageHistory[rec.ID] = rec
 
