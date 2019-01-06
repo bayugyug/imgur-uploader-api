@@ -48,5 +48,3 @@ build:
     - docker:dind
   script:
     - docker build -t imgur-uploader-api -f Dockerfile.gitlab .
-	
-	
