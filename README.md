@@ -103,7 +103,7 @@ $ ./imgur-uploader-api
 	
 ###### - Upload image URLs to the api-bridge
 	
-	```sh
+```sh
 		curl -v  POST 'http://127.0.0.1:7777/v1/api/images/upload' -d '{
 				"urls": [
 					"https://farm3.staticflickr.com/2879/11234651086_681b3c2c00_b_d.jpg",
@@ -115,12 +115,13 @@ $ ./imgur-uploader-api
 		{
 		  "jobId": "1cfc8710-c366-4241-833b-3c5a988700cf-20190106-091212"
 		}
-	```
+```
 	
 ###### 	- Get image URLs list
 			
-	```sh		
+```sh		
 		curl -X GET  'http://127.0.0.1:7777/v1/api/images'
+		
 		@output:
 		{
 		  "uploaded": [
@@ -128,12 +129,12 @@ $ ./imgur-uploader-api
 			"https://i.imgur.com/u6GIFQA.jpg"
 		  ]
 		}
-	```	
+```	
 		
 ###### - Get image URLs list by jobId
 	
 	
-	```sh
+```sh
 		curl -v  GET 'http://127.0.0.1:7777/v1/api/images/upload/1cfc8710-c366-4241-833b-3c5a988700cf-20190106-091212'  
 		
 		@output:
@@ -151,18 +152,19 @@ $ ./imgur-uploader-api
 			"failed": null
 		  }
 		}
-	```
+```
 			
 ###### - Get image URLs list by jobId (Invalid JobId)
 	
-	```sh
+```sh
 		curl -v  GET 'http://127.0.0.1:7777/v1/api/images/upload/f16fbca4-dae2-4c73-8304-df2966fa8831-20190106-nocontent' 
+		
 		@output:
 		{
 		  "code": 204,
 		  "message": "No Content"
 		}
-	```
+```
 	
 	
 	
