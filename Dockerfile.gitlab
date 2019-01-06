@@ -1,0 +1,17 @@
+FROM golang:1.10-alpine3.7 as build
+
+#auth
+MAINTAINER bayugyug<bayugyug@gmail.com>
+
+
+WORKDIR /go/src/imgur-uploader-api
+
+COPY . .
+
+RUN go build -o imgur-uploader-api
+
+FROM alpine:3.7
+
+COPY --from=build /go/src/imgur-uploader-api/imgur-uploader-api /usr/local/bin/imgur-uploader-api
+
+ENTRYPOINT ["/usr/local/bin/imgur-uploader-api"]
