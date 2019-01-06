@@ -92,7 +92,7 @@
 
 ##### 	- After running the docker binary, we need to supply the authorization-code by approving a permission on this app 
 	  
-##### 	- Paste the below URL on your browser(chrome)
+##### 	- Paste the below URL on your browser   (can try using chrome)
 			
 		https://api.imgur.com/oauth2/authorize?access_type=offline&client_id={YOUR_CLIENT_ID_FROM_IMGUR}&response_type=code&state=state
 
@@ -100,7 +100,7 @@
 	   
 	    https://app.getpostman.com/oauth2/callback?state=state&code={IMGUR_AUTH_CODE_IS_HERE}
 		
-##### 	- Pass this one-time to the api-bridge 
+##### 	- Pass this auth-code one-time to the api-bridge 
 
 ```sh
 	    curl -v -X GET  'http://127.0.0.1:7777/v1/api/credentials/{IMGUR_AUTH_CODE_IS_HERE}'
