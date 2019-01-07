@@ -9,7 +9,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/go-chi/render"
 	"golang.org/x/oauth2"
 )
 
@@ -19,6 +18,7 @@ var (
 	pAuthURL  string
 )
 
+//initAuthBearerToken try to init the token grabber
 func initAuthBearerToken() string {
 
 	pContext = context.Background()
@@ -39,6 +39,7 @@ func initAuthBearerToken() string {
 	return pAuthURL
 }
 
+//getAuthBearerToken et the auth token based on the code passed as params
 func getAuthBearerToken() string {
 
 	// Use the authorization code that is pushed to the redirect
@@ -55,7 +56,6 @@ func getAuthBearerToken() string {
 	if err != nil {
 		log.Println(err)
 		if pParamConfig.Bearer != nil && pParamConfig.Bearer.RefreshToken != "" {
-			log.Println("getAuthBearerToken", err.Error())
 			_ = checkOldBearerToken(err.Error())
 		}
 		return err.Error()
@@ -72,30 +72,6 @@ func getAuthBearerToken() string {
 
 	//good
 	return ""
-}
-
-func checkAuthBearer(w http.ResponseWriter, r *http.Request) bool {
-
-	//check if set
-	if pParamConfig == nil || pParamConfig.Bearer == nil {
-		render.JSON(w, r, APIResponse{
-			Code:    http.StatusNonAuthoritativeInfo,
-			Message: http.StatusText(http.StatusNonAuthoritativeInfo)})
-		return false
-	}
-	//chk type
-	if !strings.EqualFold(pParamConfig.Bearer.TokenType, "bearer") ||
-		pParamConfig.Bearer.RefreshToken == "" ||
-		pParamConfig.Bearer.AccessToken == "" {
-		dumper("AUTH_BEARER_EMPTY", pParamConfig)
-		render.JSON(w, r, APIResponse{
-			Code:    http.StatusNonAuthoritativeInfo,
-			Message: http.StatusText(http.StatusNonAuthoritativeInfo)})
-		return false
-	}
-
-	//good
-	return true
 }
 
 //showMacroMsg

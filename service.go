@@ -9,6 +9,7 @@ import (
 	"time"
 )
 
+//dumper dummy dumper
 func dumper(infos ...interface{}) {
 	for _, v := range infos {
 		j, _ := json.MarshalIndent(v, "", "\t")
@@ -18,6 +19,7 @@ func dumper(infos ...interface{}) {
 	}
 }
 
+//manageImageLocalDownloader watcher for the queue [pending]
 func manageImageLocalDownloader(isReady chan bool) {
 	isReady <- true
 	for {
@@ -26,7 +28,7 @@ func manageImageLocalDownloader(isReady chan bool) {
 			if rec.ID != "" {
 				//save it
 				rec.Status = StatusInProgress
-				pImageHistory[rec.ID] = rec
+				pImageHistoryChan <- rec
 				//forget and process
 				go downloadImage2LocalAndPush(rec)
 			}
@@ -34,6 +36,21 @@ func manageImageLocalDownloader(isReady chan bool) {
 	}
 }
 
+//manageImageHistory watcher for the queue [history]
+func manageImageHistory(isReady chan bool) {
+	isReady <- true
+	for {
+		select {
+		case rec := <-pImageHistoryChan:
+			if rec.ID != "" {
+				//save it
+				pImageHistory[rec.ID] = rec
+			}
+		}
+	}
+}
+
+//downloadImage2LocalAndPush grab the file/conveert to binary/push to imgur
 func downloadImage2LocalAndPush(rec *UploadRecords) {
 
 	processed := make(map[string]string)
@@ -48,9 +65,7 @@ func downloadImage2LocalAndPush(rec *UploadRecords) {
 			headers := fmtBearerHeader()
 			postresp, postcode, perr := httpPost(pImgurPostImageURL, frm.Encode(), headers)
 			if postcode == http.StatusOK && perr == nil {
-
 				dumper(postresp)
-
 				oks, apiret := fmtImgurResponse(postresp)
 				if !oks || apiret == nil {
 					rec.URLS[k].Status = StatusFailed
@@ -77,12 +92,14 @@ func downloadImage2LocalAndPush(rec *UploadRecords) {
 				rec.URLS[k].Status = StatusFailed
 				rec.UploadedList.Failed = append(rec.UploadedList.Failed, row.Link)
 				processed[row.Link] = row.Link
+				dumper("FAIL_UPLOAD_IMG", postresp, postcode, perr)
 			}
 		} else {
 			//fail to grab
 			rec.URLS[k].Status = StatusFailed
 			rec.UploadedList.Failed = append(rec.UploadedList.Failed, row.Link)
 			processed[row.Link] = row.Link
+			dumper("FAIL_GRAB_RAW_IMG", resp, rcode, derr)
 		}
 	}
 
@@ -101,10 +118,10 @@ func downloadImage2LocalAndPush(rec *UploadRecords) {
 	dumper(rec)
 
 	//maybe overwrite it
-	pImageHistory[rec.ID] = rec
-
+	pImageHistoryChan <- rec
 }
 
+//fmtImgurResponse format imgur response
 func fmtImgurResponse(body string) (bool, *ImgurResult) {
 	var apires ImgurResult
 	err := json.Unmarshal([]byte(body), &apires)

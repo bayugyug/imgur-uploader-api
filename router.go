@@ -12,7 +12,8 @@ import (
 	"github.com/go-chi/valve"
 )
 
-func initHttpRouters() {
+//handleIt entry is here :-)
+func handleIt(api ApiHandler) {
 	// shutdown signaling.
 	valv := valve.New()
 	baseCtx := valv.Context()
@@ -44,27 +45,35 @@ func initHttpRouters() {
 	router.Use(cors.Handler)
 
 	// Basic Routes
-	router.Get("/", IndexPage)
+	router.Get("/", api.IndexPage)
 
 	// Basic Routes Groupings
 	router.Route("/v1", func(r chi.Router) {
-		r.Mount("/api/images", ImgApiRoutes())
-		r.Mount("/api/credentials", UserApiRoutes())
+		r.Mount("/api/images", ImgApiRoutes(api))
+		r.Mount("/api/credentials", UserApiRoutes(api))
 	})
 	log.Println("Starting port", pHttpPort)
 	log.Fatal(http.ListenAndServe(":"+pHttpPort, router))
 }
 
-func ImgApiRoutes() *chi.Mux {
+//ImgApiRoutes mapping of routes,
+//	@routes
+//		/v1/api/images
+//		/v1/api/images/upload
+//		/v1/api/images/upload/{id}
+func ImgApiRoutes(api ApiHandler) *chi.Mux {
 	r := chi.NewRouter()
-	r.Get("/upload/{id}", GetOneImage)
-	r.Post("/upload", UploadImage)
-	r.Get("/", GetAllImages)
+	r.Get("/upload/{id}", api.GetOneImage)
+	r.Post("/upload", api.UploadImage)
+	r.Get("/", api.GetAllImages)
 	return r
 }
 
-func UserApiRoutes() *chi.Mux {
+//UserApiRoutes mapping of routes
+//	@routes
+//		/v1/api/credentials
+func UserApiRoutes(api ApiHandler) *chi.Mux {
 	r := chi.NewRouter()
-	r.Get("/{code}", SetUserCode)
+	r.Get("/{code}", api.SetUserCode)
 	return r
 }

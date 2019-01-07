@@ -23,6 +23,7 @@ func (k ctxKey) String() string {
 }
 
 var (
+	api              ApiHandler
 	dummyCredentials = ` {
         "client_id": "80473df3ff0641d",
         "client_secret": "f27a1350cb03410cbfc4fea0069201f2cb6cb93c",
@@ -55,7 +56,7 @@ var (
 			Method:   "GET",
 			URL:      "/v1/api/images",
 			Expected: `{"code":203,"message":"Non-Authoritative Information"}`,
-			Handler:  GetAllImages,
+			Handler:  api.GetAllImages,
 			Status:   200,
 			Ctx:      context.WithValue(context.Background(), ctxKey{""}, ""),
 		},
@@ -63,7 +64,7 @@ var (
 			Method:   "GET",
 			URL:      "/v1/api/images/upload/invalid-content-job-id",
 			Expected: `{"code":203,"message":"Non-Authoritative Information"}`,
-			Handler:  GetOneImage,
+			Handler:  api.GetOneImage,
 			Status:   200,
 			Ctx:      context.WithValue(context.Background(), ctxKey{""}, ""),
 		},
@@ -71,7 +72,7 @@ var (
 			Method:   "POST",
 			URL:      "/v1/api/images/upload",
 			Expected: `{"code":203,"message":"Non-Authoritative Information"}`,
-			Handler:  UploadImage,
+			Handler:  api.UploadImage,
 			FormData: dummyFdata,
 			Status:   200,
 			Ctx:      context.WithValue(context.Background(), ctxKey{""}, ""),

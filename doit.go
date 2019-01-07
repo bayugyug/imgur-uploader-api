@@ -14,6 +14,7 @@ func doIt() {
 	//cfg
 	initConfig()
 	//app entry
-	initHttpRouters()
+	var app ApiHandler
+	handleIt(app)
 
 }

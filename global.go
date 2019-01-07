@@ -50,18 +50,19 @@ var (
 	//ssl certs
 	pool *x509.CertPool
 
-	pDumpTmp         = "/tmp/imgur-tmf"
-	pHttpPort        = "7777"
-	pUserCredentials = ""
-	pConfCredentials = ""
-	pParamConfig     *UserCredential
-	pParamConfigOk   bool
-	userCodeChan     chan string
-	pShowDebug       bool
-	pImageUniqHash   map[string]string
-	pImageHistory    map[string]*UploadRecords
-	pUploaderChan    chan *UploadRecords
-	userBearerChan   chan string
+	pDumpTmp          = "/tmp/imgur-tmf"
+	pHttpPort         = "7777"
+	pUserCredentials  = ""
+	pConfCredentials  = ""
+	pParamConfig      *UserCredential
+	pParamConfigOk    bool
+	userCodeChan      chan string
+	pShowDebug        bool
+	pImageUniqHash    map[string]string
+	pImageHistory     map[string]*UploadRecords
+	pUploaderChan     chan *UploadRecords
+	userBearerChan    chan string
+	pImageHistoryChan chan *UploadRecords
 )
 
 func init() {
@@ -77,6 +78,7 @@ func init() {
 	pImageUniqHash = make(map[string]string)
 	pImageHistory = make(map[string]*UploadRecords)
 	pUploaderChan = make(chan *UploadRecords, 100)
+	pImageHistoryChan = make(chan *UploadRecords, 100)
 
 	//init certs
 	pool = x509.NewCertPool()
@@ -151,6 +153,9 @@ func initConfig() {
 	isReady := make(chan bool, 1)
 	go manageImageLocalDownloader(isReady)
 	<-isReady
+	isHistReady := make(chan bool, 1)
+	go manageImageHistory(isHistReady)
+	<-isHistReady
 
 	//show permission URL
 	showMacroMsg(initAuthBearerToken())
