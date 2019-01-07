@@ -9,6 +9,12 @@ import (
 	"testing"
 )
 
+var dummyFdata = `{
+                "urls": [
+                        "https://farm3.staticflickr.com/2879/11234651086_681b3c2c00_b_d.jpg",
+                        "https://farm4.staticflickr.com/3790/11244125445_3c2f32cd83_k_d.jpg"
+                        ]
+                }`
 var testRawData = []struct {
 	Method   string
 	URL      string
@@ -33,6 +39,7 @@ var testRawData = []struct {
 		URL:      "/v1/api/images/upload",
 		Expected: `{"code":203,"message":"Non-Authoritative Information"}`,
 		Handler:  UploadImage,
+		FormData: dummyFdata,
 	},
 }
 
