@@ -1,5 +1,8 @@
 variables:
   PACKAGE_PATH: /go/src/gitlab.com/bayugyug/imgur-uploader-api
+  PACKAGE_IMG: registry.gitlab.com/bayugyug/imgur-uploader-api
+  PACKAGE_DEV_IMG: registry.gitlab.com/bayugyug/imgur-uploader-api:$CI_COMMIT_REF_NAME
+  PACKAGE_PROD_IMG: registry.gitlab.com/bayugyug/imgur-uploader-api:latest
 
 stages:
   - dep
@@ -48,3 +51,4 @@ build:
     - docker:dind
   script:
     - docker build -t imgur-uploader-api -f Dockerfile.gitlab .
+    - echo ${PACKAGE_PROD_IMG}
