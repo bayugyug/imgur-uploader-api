@@ -50,5 +50,7 @@ build:
   services:
     - docker:dind
   script:
-    - docker build -t imgur-uploader-api -f Dockerfile.gitlab .
     - echo ${PACKAGE_PROD_IMG}
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+    - docker build -t ${PACKAGE_IMG} -f Dockerfile.gitlab .
+    - docker push ${PACKAGE_PROD_IMG}
