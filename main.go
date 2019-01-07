@@ -1,5 +1,6 @@
 package main
 
+//main start it here :-)
 func main() {
-	initHttpRouters()
+	doIt()
 }

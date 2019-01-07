@@ -78,16 +78,6 @@ func init() {
 	pImageHistory = make(map[string]*UploadRecords)
 	pUploaderChan = make(chan *UploadRecords, 100)
 
-	//recovery
-	initRecov()
-	//evt
-	initEnvParams()
-	//loggers
-	initLogger(os.Stdout, os.Stdout, os.Stderr)
-	//init
-	httpInit()
-	//cfg
-	initConfig()
 	//init certs
 	pool = x509.NewCertPool()
 	pool.AppendCertsFromPEM(pemCerts)

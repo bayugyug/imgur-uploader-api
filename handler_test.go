@@ -17,9 +17,17 @@ var testRawData = []struct {
 		URL:      "/v1/api/images",
 		Expected: `{"code":203,"message":"Non-Authoritative Information"}`,
 	},
+	{
+		Method: "GET",
+
+		URL:      "/v1/api/images/upload/invalid-content-job-id",
+		Expected: `{"code":203,"message":"Non-Authoritative Information"}`,
+	},
 }
 
-func TestImagesList(t *testing.T) {
+func TestSomeHandler(t *testing.T) {
+	t.Log("Sanity checking ....")
+	pUserCredentials = `{"client_id": "80473df3ff0641d", "client_secret": "f27a1350cb03410cbfc4fea0069201f2cb6cb93c"}`
 	for _, rdata := range testRawData {
 		req, err := http.NewRequest(rdata.Method, rdata.URL, nil)
 		if err != nil {
