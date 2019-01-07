@@ -55,6 +55,7 @@ func getAuthBearerToken() string {
 	if err != nil {
 		log.Println(err)
 		if pParamConfig.Bearer != nil && pParamConfig.Bearer.RefreshToken != "" {
+			log.Println("getAuthBearerToken", err.Error())
 			_ = checkOldBearerToken(err.Error())
 		}
 		return err.Error()
