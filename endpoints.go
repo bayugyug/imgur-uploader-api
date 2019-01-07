@@ -14,7 +14,6 @@ import (
 )
 
 func UploadImage(w http.ResponseWriter, r *http.Request) {
-
 	//auth-checker
 	if !checkAuthBearer(w, r) {
 		return
@@ -100,7 +99,7 @@ func sanityCheckImageUpload(imgs ParamImageURLS) (int, string) {
 	//for testing purposes, dont set limit :-)
 	var validImgs []*URLInfo
 	var imgsPending []string
-	
+
 	imgUniqHash := make(map[string]string)
 
 	for _, v := range imgs.URLS {
@@ -119,13 +118,13 @@ func sanityCheckImageUpload(imgs ParamImageURLS) (int, string) {
 			imgsPending = append(imgsPending, v)
 		}
 	}
-	
+
 	//try if all ok
 	validT := len(validImgs)
 	if validT <= 0 {
 		return -1, ""
 	}
-	
+
 	//get uuid
 	jobId := genJobId()
 

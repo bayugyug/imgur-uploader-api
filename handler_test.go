@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bytes"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -11,31 +13,49 @@ var testRawData = []struct {
 	Method   string
 	URL      string
 	Expected string
+	FormData string
+	Handler  func(w http.ResponseWriter, r *http.Request)
 }{
 	{
 		Method:   "GET",
 		URL:      "/v1/api/images",
 		Expected: `{"code":203,"message":"Non-Authoritative Information"}`,
+		Handler:  GetAllImages,
 	},
 	{
-		Method: "GET",
-
+		Method:   "GET",
 		URL:      "/v1/api/images/upload/invalid-content-job-id",
 		Expected: `{"code":203,"message":"Non-Authoritative Information"}`,
+		Handler:  GetOneImage,
+	},
+	{
+		Method:   "POST",
+		URL:      "/v1/api/images/upload",
+		Expected: `{"code":203,"message":"Non-Authoritative Information"}`,
+		Handler:  UploadImage,
 	},
 }
 
 func TestSomeHandler(t *testing.T) {
+
 	t.Log("Sanity checking ....")
-	pUserCredentials = `{"client_id": "80473df3ff0641d", "client_secret": "f27a1350cb03410cbfc4fea0069201f2cb6cb93c"}`
+
+	var body io.Reader
 	for _, rdata := range testRawData {
-		req, err := http.NewRequest(rdata.Method, rdata.URL, nil)
+		body = nil
+		if rdata.Method == "POST" {
+			body = bytes.NewBufferString(rdata.FormData)
+		}
+
+		//t.Log(rdata.Method, rdata.URL)
+
+		req, err := http.NewRequest(rdata.Method, rdata.URL, body)
 		if err != nil {
 			t.Fatal(err)
 		}
 
 		rr := httptest.NewRecorder()
-		handler := http.HandlerFunc(GetAllImages)
+		handler := http.HandlerFunc(rdata.Handler)
 
 		handler.ServeHTTP(rr, req)
 
