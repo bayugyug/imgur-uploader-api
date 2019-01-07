@@ -28,7 +28,6 @@ func formatConfig(s, t string) (bool, *UserCredential) {
 			return false, nil
 		}
 	} else if t != "" {
-		log.Println(t)
 		conf = []byte(t)
 	}
 

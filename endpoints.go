@@ -26,6 +26,8 @@ func UploadImage(w http.ResponseWriter, r *http.Request) {
 		replyNoContent(w, r)
 		return
 	}
+	//just in case :-)
+	defer r.Body.Close()
 
 	//chk if url's valid and/or uniq
 	valid, jobId := sanityCheckImageUpload(images)
