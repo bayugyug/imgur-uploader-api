@@ -2,8 +2,10 @@ package main
 
 import (
 	"context"
+	"crypto/tls"
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"net/url"
 	"strings"
@@ -48,7 +50,18 @@ func getAuthBearerToken() string {
 	// conf.Client will refresh the token as necessary.
 
 	// Use the custom HTTP client when requesting a token.
-	httpClient := &http.Client{Timeout: 30 * time.Second}
+	httpClient := &http.Client{
+		Timeout: time.Duration(30000 * time.Millisecond),
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true, RootCAs: pool},
+			Dial: (&net.Dialer{
+				Timeout:   30000 * time.Millisecond,
+				KeepAlive: 0,
+			}).Dial,
+			TLSHandshakeTimeout: 30 * time.Second,
+		},
+	}
+
 	pContext = context.WithValue(pContext, oauth2.HTTPClient, httpClient)
 
 	// shake it
