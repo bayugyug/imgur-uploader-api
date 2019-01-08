@@ -10,6 +10,8 @@
 ### Registration Quickstart
 
 	 
+		- [x] Prerequisite you must have an [Imgur account](https://imgur.com/)
+
 		- [x] Register an Application by providing required information @ https://api.imgur.com/oauth2/addclient
 		
 				- Application name: [your-app-name-here]
@@ -24,7 +26,7 @@
 				
 		- [x] Save somewhere safe the Client-ID and Client-Secret
 		
-		- [x] Format your config paramter in JSON format:
+		- [x] Format your config parameter in JSON format:
 		        
 				Example: 
 				{
@@ -45,7 +47,7 @@
 
     sudo  sysctl -w net.ipv4.ip_forward=1
 
-    sudo  docker run -p 7000-8000:7000-8000 -v `pwd`:`pwd` -w `pwd` -d --name imgur-uploader-api-latest  bayugyug/imgur-uploader-api:latest --port 7777   --credentials='{"client_id": "{YOUR_CLIENT_ID_FROM_IMGUR}", "client_secret": "{YOUR_CLIENT_SECRET_FROM_IMGUR}"}'
+    sudo  docker run -p 7000-8000:7000-8000 -v `pwd`:`pwd` -w `pwd` -d --name imgur-uploader-api-latest  registry.hub.docker.com/bayugyug/imgur-uploader-api:latest --port 7777   --credentials='{"client_id": "{YOUR_CLIENT_ID_FROM_IMGUR}", "client_secret": "{YOUR_CLIENT_SECRET_FROM_IMGUR}"}'
 
 
 ```
