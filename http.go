@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"crypto/tls"
 	"fmt"
 	"io/ioutil"
 	"math/rand"
@@ -29,6 +30,7 @@ func httpInit() {
 		httpClient := &http.Client{
 			Timeout: time.Duration(30000 * time.Millisecond),
 			Transport: &http.Transport{
+				TLSClientConfig: &tls.Config{InsecureSkipVerify: true, RootCAs: pool},
 				Dial: (&net.Dialer{
 					Timeout:   30000 * time.Millisecond,
 					KeepAlive: 0,
