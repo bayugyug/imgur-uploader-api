@@ -38,7 +38,7 @@
 
 
 				
-### Docker Binary
+### Docker Binary (via https://cloud.docker.com)
 
 
 ```sh
@@ -50,6 +50,18 @@
 
 ```
 
+
+### Docker Binary (via https://registry.gitlab.com/)
+
+
+```sh
+
+    sudo  sysctl -w net.ipv4.ip_forward=1
+
+    sudo  docker run -p 7000-8000:7000-8000 -v `pwd`:`pwd` -w `pwd` -d --name imgur-uploader-api-latest  registry.gitlab.com/bayugyug/imgur-uploader-api:latest --port 7777   --credentials='{"client_id": "{YOUR_CLIENT_ID_FROM_IMGUR}", "client_secret": "{YOUR_CLIENT_SECRET_FROM_IMGUR}"}'
+
+
+```
 
 ### Compile and Run-In-Command-Line
 
